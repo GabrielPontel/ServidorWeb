@@ -79,14 +79,3 @@ As constantes no início do código podem ser ajustadas:
 2. Cada cliente aceito é inserido na lista encadeada e tratado em uma nova thread (`fazer_conexao`).
 3. A thread usa `select` com timeout de 2 s; ao receber dados, `formatar_resposta` interpreta a requisição, resolve o caminho físico, identifica o `Content-Type` e monta a resposta com cabeçalhos e corpo.
 4. Ao fim (timeout, erro ou `Connection: close`), o socket é fechado e o cliente removido da lista.
-
-## Limitações conhecidas
-
-Pontos ainda não tratados pelo servidor:
-
-- Somente Windows (Winsock).
-- Buffer de resposta fixo de ~1 MB: arquivos maiores não são suportados.
-- Requisições acima de 1023 bytes são truncadas.
-- Não há proteção contra *path traversal* (`../`).
-- A lista de clientes é acessada por várias threads sem sincronização.
-- A linha de status sempre usa a frase `OK` (inclusive em respostas 404).
