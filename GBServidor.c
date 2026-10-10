@@ -13,7 +13,7 @@
 #define MESSAGESIZE 1024
 #define MAXSOCKETS 20
 
-// Estrutura para a Lista Encadeada de Conex�es
+// Estrutura para a Lista Encadeada de Conexões
 typedef struct cliente
 {
     SOCKET socket;
@@ -47,7 +47,7 @@ void remover_cliente(tp_cliente *alvo)
     }
 }
 
-//Fun��o para inserir um novo cliente
+//Função para inserir um novo cliente
 void inserir_cliente(tp_cliente *novo_no)
 {
     if (novo_no != NULL)
@@ -57,7 +57,7 @@ void inserir_cliente(tp_cliente *novo_no)
     }
 }
 
-//Fun��o para calcular o tamanho do arquivo
+//Função para calcular o tamanho do arquivo
 int calcular_tamanho_arquivo(char caminho[])
 {
 
@@ -78,7 +78,7 @@ int calcular_tamanho_arquivo(char caminho[])
     return (int) tamanho_bytes;
 }
 
-//Fun��o para ler o conteudo do arquivo texto
+//Função para ler o conteudo do arquivo texto
 char *ler_texto(char caminho[])
 {
     int tamanho, lidos;
@@ -145,12 +145,12 @@ char *ler_binario(char caminho[])
     return conteudo;
 }
 
-//Fun��o que vai retornar o content type adequado do meu arquivo
+//Função que vai retornar o content type adequado do meu arquivo
 void reconhecendo_content_type(char caminho[], char conteudo[])
 {
     char *extensao;
     conteudo[0]=0;
-    // Pega do �ltimo ponto para frente da string
+    // Pega do último ponto para frente da string
     extensao = strrchr(caminho, '.');
 
     if (extensao == NULL)
@@ -235,7 +235,7 @@ void reconhecendo_content_type(char caminho[], char conteudo[])
     }
     else if (strcmp(extensao, ".webm") == 0)
     {
-        // V�deo WebM
+        // Vídeo WebM
         strcpy(conteudo, "video/webm");
     }
     else if (strcmp(extensao, ".woff") == 0)
@@ -250,13 +250,13 @@ void reconhecendo_content_type(char caminho[], char conteudo[])
     }
 }
 
-//Fun��o vai verificar o tipo do content type para ver se o arquivo � do tipo texto ou binario
+//Função vai verificar o tipo do content type para ver se o arquivo é do tipo texto ou binario
 //0 -> Binarip
 //1 -> Texto
 int encontrar_tipo_arquivo(char content_type[])
 {
     int tipo = -1;
-    //Da lista de content type que coloquei somente quem tem esses 3 primeiros nomes ou comecam com isos � texto
+    //Da lista de content type que coloquei somente quem tem esses 3 primeiros nomes ou comecam com isos é texto
     //Sendo assim o else seria os binarios, por isso retorna 0
     if (strncmp(content_type, "text/", 5) == 0 || strcmp(content_type, "application/json") ==0 || strcmp(content_type, "application/xml") == 0)
     {
@@ -269,20 +269,20 @@ int encontrar_tipo_arquivo(char content_type[])
     return tipo;
 }
 
-//Funcao que verifica se � arquivo ou diretorio que esta pedindo
+//Funcao que verifica se é arquivo ou diretorio que esta pedindo
 //levando em consideracao que se for arquivo vai ter um .
 int encontrar_tipo(char caminho_req[])
 {
     char *ponto = strrchr(caminho_req, '.');
-    // Se existe um ponto � um arquivo
+    // Se existe um ponto é um arquivo
     if (ponto != NULL)
     {
-        return 1; // � um arquivo
+        return 1; // é um arquivo
     }
-    return 0; // � uma pasta
+    return 0; // é uma pasta
 }
 
-//Fun��o para encontrar a subpasta a partir do referer
+//Função para encontrar a subpasta a partir do referer
 void encontrar_subpasta(char subpasta[], char requisicao[])
 {
     char  referer[100]="",*linha_referer;
@@ -379,7 +379,7 @@ int formatar_resposta(char requisicao[], char resposta_buffer[], char fechar[])
             tamanho_arq = calcular_tamanho_arquivo(caminho_fisico);
         }
 
-        // conteudo do arquivo (Texto ou Bin�rio)
+        // conteudo do arquivo (Texto ou Binário)
         tipo_arq = encontrar_tipo_arquivo(content_type);
         if (tipo_arq == 1)
         {
@@ -390,7 +390,7 @@ int formatar_resposta(char requisicao[], char resposta_buffer[], char fechar[])
             conteudo_arquivo = ler_binario(caminho_fisico);
         }
 
-        // Monta o cabe�alho HTTP e anexa o conte�do
+        // Monta o cabeçalho HTTP e anexa o conteúdo
         tamanho_cabecalho = sprintf(resposta_buffer,
                                     "HTTP/1.1 %s OK\r\n"
                                     "Server: GBServer\r\n"
@@ -400,7 +400,7 @@ int formatar_resposta(char requisicao[], char resposta_buffer[], char fechar[])
                                     "Keep-Alive: timeout=5, max=100\r\n\r\n",
                                     status, tamanho_arq, content_type, fechar);
 
-        // Copia o conte�do do arquivo logo ap�s os cabe�alhos (suporta dados bin�rios e texto)
+        // Copia o conteúdo do arquivo logo após os cabeçalhos (suporta dados binários e texto)
         memcpy(resposta_buffer + tamanho_cabecalho, conteudo_arquivo, tamanho_arq);
         tamanho_resposta = tamanho_cabecalho + tamanho_arq;
         free(conteudo_arquivo);
@@ -450,7 +450,7 @@ void fazer_conexao(void *p)
             else
             {
                 message[0] = '\0';
-                //Recep��o da mensagem
+                //Recepção da mensagem
                 len = recv(cliente->socket, message, MESSAGESIZE - 1, 0);
                 if(len > 0)
                 {
@@ -516,19 +516,19 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    //Prepara��o da estrutura (struct) sockaddr_in
+    //Preparação da estrutura (struct) sockaddr_in
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY; ///0.0.0.0
     server.sin_port = htons(PORT);
 
-    //Constr�i o socket -> solicita uso da porta ao SO
+    //Constrói o socket -> solicita uso da porta ao SO
     if( bind(s,(struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
     {
         printf("\nNao e possivel construir o socket: %d", WSAGetLastError());
         exit(EXIT_FAILURE);
     }
 
-    //Come�a a escutar na porta
+    //Começa a escutar na porta
     listen(s,3);
 
     c = sizeof(struct sockaddr_in);
@@ -542,13 +542,13 @@ int main(int argc, char *argv[])
         }
         else
         {
-            //Caso chegue uma conex�o, a fun��o accept ir� verificar se ir� aceit�-la ou n�o
+            //Caso chegue uma conexão, a função accept irá verificar se irá aceitá-la ou não
             novo_no->socket = accept(s, (struct sockaddr *)&client, &c);
             novo_no->proximo = NULL;
 
             if (novo_no->socket == INVALID_SOCKET)
             {
-                printf("\nConexao n�o aceita. Codigo de erro: %d", WSAGetLastError());
+                printf("\nConexao nao aceita. Codigo de erro: %d", WSAGetLastError());
                 free(novo_no);
             }
             else
@@ -562,7 +562,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    //Finaliza��o da biblioteca
+    //Finalização da biblioteca
     WSACleanup();
 
     return 0;
