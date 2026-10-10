@@ -419,6 +419,8 @@ void fazer_conexao(void *p)
     fd_set set;
     struct timeval timeout;
     int rv;
+    char *fim_cabecalho;
+    int tamanho_cab;
 
     //Se for alocado corretamenti...
     if (resposta_grande != NULL)
@@ -453,13 +455,24 @@ void fazer_conexao(void *p)
                 if(len > 0)
                 {
                     message[len] = '\0';
-                    printf("\nRequisicao (%d bytes): \n\n%s\n", strlen(message), message);
+                    printf("\n================ REQUISICAO RECEBIDA (%d bytes) ================\n", (int) strlen(message));
+                    printf("%s", message);
+                    printf("================== FIM DA REQUISICAO ==================\n");
                     fflush(stdout);
                     fechar_conexao = deve_fechar_conexao(message);
                     tamanho_resposta = formatar_resposta(message, resposta_grande, fechar_conexao);
 
                     // Envia a resposta completa para o cliente
                     send(cliente->socket, resposta_grande, tamanho_resposta, 0);
+
+                    // Mostra no terminal apenas os cabecalhos da resposta (o corpo pode ser binario)
+                    fim_cabecalho = strstr(resposta_grande, "\r\n\r\n");
+                    tamanho_cab = (fim_cabecalho != NULL) ? (int)(fim_cabecalho - resposta_grande) + 4 : tamanho_resposta;
+                    printf("\n---------------- RESPOSTA ENVIADA (%d bytes) ----------------\n", tamanho_resposta);
+                    printf("%.*s", tamanho_cab, resposta_grande);
+                    printf("[corpo: %d bytes]\n", tamanho_resposta - tamanho_cab);
+                    printf("------------------ FIM DA RESPOSTA ------------------\n");
+                    fflush(stdout);
 
                     if (strcmp(fechar_conexao, "close") == 0)
                     {
