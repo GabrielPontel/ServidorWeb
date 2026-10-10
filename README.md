@@ -12,7 +12,6 @@ Servidor web HTTP/1.1 simples escrito em **C** com a API **Winsock2** do Windows
 - **Erro 404 personalizado** — arquivos inexistentes retornam `arquivos/error404.html`.
 - **Conexões persistentes (keep-alive)** — a conexão permanece aberta para várias requisições, sendo encerrada após 2 s de inatividade ou quando o cliente envia `Connection: close`.
 - **Múltiplos clientes** — cada conexão roda em sua própria thread (`_beginthread`), e os clientes ativos são mantidos em uma lista encadeada.
-- **Log no terminal** — cada requisição recebida e cada resposta enviada aparecem em blocos separados e identificados.
 
 ## Requisitos
 
@@ -36,21 +35,21 @@ gcc GBServidor.c -o GBServidor.exe -lws2_32
 O executável procura os arquivos na pasta `arquivos/`, relativa ao diretório onde é executado:
 
 ```
-ServidorWeb/
+GBServidor/
 ├── GBServidor.c            # código-fonte do servidor
 ├── README.md
 └── arquivos/               # raiz do site
     ├── index.html          # página inicial (/)
     ├── style_index.css     # estilo da página inicial
     ├── error404.html       # página de erro 404
-    └── www/                # página "Conheça meu perfil", servida em /www
+    └── www/                # site de exemplo, servido em /www
         ├── index.html
         ├── estilo.css
-        ├── linkedin.png
+        ├── bolo.jpg
         └── favicon.ico
 ```
 
-Para testar: <http://localhost/> (página inicial), <http://localhost/www> (página "Conheça meu perfil", com link para o LinkedIn) e <http://localhost/naoexiste.html> (erro 404).
+Para testar: <http://localhost/> (página inicial), <http://localhost/www> (exemplo com CSS e imagem) e <http://localhost/naoexiste.html> (erro 404).
 
 ## Uso
 
@@ -63,7 +62,7 @@ Para testar: <http://localhost/> (página inicial), <http://localhost/www> (pág
 
 3. Acesse no navegador: <http://localhost/>
 
-O console exibe cada conexão aceita (IP e porta do cliente) e, em blocos separados, a **requisição recebida** e os cabeçalhos da **resposta enviada**.
+O console exibe cada conexão aceita (IP e porta do cliente) e o conteúdo das requisições recebidas.
 
 ## Configuração
 
