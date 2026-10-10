@@ -1,4 +1,4 @@
-# GBServidor
+# ServidorWeb
 
 Servidor web HTTP/1.1 simples escrito em **C** com a API **Winsock2** do Windows. Atende requisições `GET`, serve arquivos estáticos (texto e binários) a partir da pasta `arquivos/` e trata múltiplos clientes em paralelo usando uma thread por conexão.
 
