@@ -1,0 +1,4 @@
+* text=auto
+*.c text eol=crlf
+*.jpg binary
+*.ico binary

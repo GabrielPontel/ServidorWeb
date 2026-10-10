@@ -1,0 +1,19 @@
+# Executaveis e objetos
+*.exe
+*.o
+*.obj
+
+# Code::Blocks
+bin/
+obj/
+*.cbp
+*.layout
+*.depend
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Mensagem de commit temporaria
+commit-msg.txt
